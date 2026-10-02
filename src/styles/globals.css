@@ -1,0 +1,174 @@
+:root {
+  color: #172033;
+  background: #f5f7fb;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+.app-shell {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 32px 0;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.topbar h1,
+.centered-page h1 {
+  margin: 0;
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  line-height: 1.05;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: #65728a;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.button {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #24324d;
+  border-radius: 8px;
+  padding: 0 14px;
+  background: #24324d;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.column {
+  min-height: 420px;
+  border: 1px solid #d8deea;
+  border-radius: 8px;
+  padding: 16px;
+  background: #ffffff;
+}
+
+.column h2 {
+  margin: 0 0 16px;
+  font-size: 1rem;
+}
+
+.card-list {
+  display: grid;
+  gap: 12px;
+}
+
+.task-card,
+.settings-panel,
+.empty-state,
+.modal {
+  border: 1px solid #e0e5ef;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 10px 24px rgb(34 43 69 / 7%);
+}
+
+.task-card {
+  padding: 14px;
+}
+
+.settings-panel {
+  display: grid;
+  max-width: 560px;
+  gap: 16px;
+  padding: 20px;
+}
+
+.settings-panel label {
+  display: grid;
+  gap: 8px;
+  color: #4d5a70;
+  font-weight: 700;
+}
+
+.settings-panel input,
+.settings-panel select,
+.input {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid #c7cfde;
+  border-radius: 8px;
+  padding: 0 12px;
+  background: #ffffff;
+  color: #172033;
+}
+
+.centered-page {
+  display: grid;
+  min-height: 100vh;
+  place-content: center;
+  justify-items: center;
+  gap: 16px;
+  padding: 24px;
+  text-align: center;
+}
+
+.badge {
+  display: inline-flex;
+  border-radius: 999px;
+  padding: 4px 10px;
+  background: #d8f0e3;
+  color: #175c38;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.empty-state,
+.modal {
+  padding: 24px;
+}
+
+@media (max-width: 760px) {
+  .topbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .board {
+    grid-template-columns: 1fr;
+  }
+}
