@@ -6,7 +6,12 @@ type ModalProps = PropsWithChildren<{
 
 export function Modal({ children, title }: ModalProps) {
   return (
-    <section className="modal" role="dialog" aria-modal="true" aria-label={title}>
+    <section
+      className="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-label={title}
+    >
       <h2>{title}</h2>
       {children}
     </section>
