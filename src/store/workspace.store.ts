@@ -11,16 +11,39 @@ type CreateWorkspaceInput = {
   type: WorkspaceType;
 };
 
+type WorkspaceInput = {
+  workspaceId: string;
+};
+
+type UpdateWorkspaceInput = WorkspaceInput & {
+  name: string;
+};
+
 type CreateBoardInput = {
   workspaceId: string;
+  name: string;
+};
+
+type BoardInput = {
+  workspaceId: string;
+  boardId: string;
+};
+
+type UpdateBoardInput = BoardInput & {
   name: string;
 };
 
 interface WorkspaceState {
   workspaces: WorkspaceSummary[];
   createWorkspace: (input: CreateWorkspaceInput) => WorkspaceSummary;
+  updateWorkspace: (input: UpdateWorkspaceInput) => void;
+  deleteWorkspace: (input: WorkspaceInput) => WorkspaceSummary | undefined;
   createBoard: (
     input: CreateBoardInput,
+  ) => WorkspaceSummary['boards'][number] | undefined;
+  updateBoard: (input: UpdateBoardInput) => void;
+  deleteBoard: (
+    input: BoardInput,
   ) => WorkspaceSummary['boards'][number] | undefined;
   getWorkspaceById: (workspaceId: string) => WorkspaceSummary | undefined;
   getBoardById: (
@@ -74,6 +97,43 @@ export const useWorkspaceStore = create<WorkspaceState>()(
 
         return workspace;
       },
+      updateWorkspace: ({ workspaceId, name }) => {
+        const cleanName = name.trim();
+
+        if (!cleanName) {
+          return;
+        }
+
+        set((state) => ({
+          workspaces: state.workspaces.map((workspace) =>
+            workspace.id === workspaceId
+              ? {
+                  ...workspace,
+                  name: cleanName,
+                }
+              : workspace,
+          ),
+        }));
+      },
+      deleteWorkspace: ({ workspaceId }) => {
+        const workspaces = get().workspaces;
+
+        if (workspaces.length <= 1) {
+          return undefined;
+        }
+
+        const nextWorkspace =
+          workspaces.find((workspace) => workspace.id !== workspaceId) ??
+          workspaces[0];
+
+        set((state) => ({
+          workspaces: state.workspaces.filter(
+            (workspace) => workspace.id !== workspaceId,
+          ),
+        }));
+
+        return nextWorkspace;
+      },
       createBoard: ({ workspaceId, name }) => {
         const cleanName = name.trim();
 
@@ -106,6 +166,57 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         }));
 
         return board;
+      },
+      updateBoard: ({ workspaceId, boardId, name }) => {
+        const cleanName = name.trim();
+
+        if (!cleanName) {
+          return;
+        }
+
+        set((state) => ({
+          workspaces: state.workspaces.map((workspace) =>
+            workspace.id === workspaceId
+              ? {
+                  ...workspace,
+                  boards: workspace.boards.map((board) =>
+                    board.id === boardId
+                      ? {
+                          ...board,
+                          name: cleanName,
+                        }
+                      : board,
+                  ),
+                }
+              : workspace,
+          ),
+        }));
+      },
+      deleteBoard: ({ workspaceId, boardId }) => {
+        const workspace = get().getWorkspaceById(workspaceId);
+
+        if (!workspace || workspace.boards.length <= 1) {
+          return undefined;
+        }
+
+        const nextBoard =
+          workspace.boards.find((board) => board.id !== boardId) ??
+          workspace.boards[0];
+
+        set((state) => ({
+          workspaces: state.workspaces.map((currentWorkspace) =>
+            currentWorkspace.id === workspaceId
+              ? {
+                  ...currentWorkspace,
+                  boards: currentWorkspace.boards.filter(
+                    (board) => board.id !== boardId,
+                  ),
+                }
+              : currentWorkspace,
+          ),
+        }));
+
+        return nextBoard;
       },
       getWorkspaceById: (workspaceId) =>
         get().workspaces.find((workspace) => workspace.id === workspaceId),
