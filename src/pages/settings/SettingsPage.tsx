@@ -1,23 +1,17 @@
-import { Link } from 'react-router-dom';
-import { Button } from '../../shared/components/Button/Button';
-
 export function SettingsPage() {
   return (
-    <main className="app-shell">
+    <main>
       <header className="topbar">
         <div>
-          <p className="eyebrow">Workspace settings</p>
+          <p className="eyebrow">Workspace</p>
           <h1>Settings</h1>
         </div>
-        <Button as={Link} to="/">
-          Back to board
-        </Button>
       </header>
 
       <section className="settings-panel">
         <label>
           Board name
-          <input defaultValue="Kanban App" />
+          <input defaultValue="Team board" />
         </label>
         <label>
           Default view
