@@ -57,3 +57,34 @@ We currently hide edit and delete actions by default and show them after double-
 - Keep the default sidebar clean and compact.
 - Make the interaction accessible by keyboard.
 - Avoid showing edit/delete buttons permanently in the default state.
+
+## 3. Task details final UX and permissions
+
+### Status
+
+Postponed for final UX and role review.
+
+### Problem
+
+Task details currently work locally, but the final experience still needs a full review before release.
+
+The task now supports title, labels, due date, assignee, and a side note. The note is intentionally used instead of separate checklist or estimate fields. This keeps the task simpler, but the final layout and editing rules need to be reviewed once team roles are implemented.
+
+### Current behavior
+
+- Creating a task opens the task details modal immediately.
+- Labels are entered as comma-separated values.
+- Labels appear on the task card.
+- The task note appears as a side note in the details modal.
+- A short note preview appears on the task card when a note exists.
+- Clicking the note preview opens the task details modal.
+- `Priority`, `Status`, `Estimate`, and `Checklist` are intentionally not included.
+
+### Final fix direction
+
+- Review the task details layout after drag-and-drop and backend persistence are implemented.
+- Replace free-text assignee with a real workspace member selector.
+- Restrict label creation and editing to allowed roles, such as owner or team lead.
+- Decide whether labels should be workspace-level presets instead of free text.
+- Improve keyboard and mobile behavior for the task action menu and modal.
+- Add validation rules for empty labels, duplicate labels, and very long labels.

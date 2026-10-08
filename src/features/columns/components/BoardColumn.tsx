@@ -1,4 +1,6 @@
 import { Plus } from 'lucide-react';
+import { useDraggable, useDroppable } from '@dnd-kit/core';
+import { CSS } from '@dnd-kit/utilities';
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import type { BoardColumn as BoardColumnType } from '../../../entities/board/types';
@@ -9,7 +11,7 @@ import { ColumnHeader } from './ColumnHeader';
 
 type BoardColumnProps = {
   column: BoardColumnType;
-  onAddTask: (columnId: string, title: string) => void;
+  onAddTask: (columnId: string, title: string) => BoardTask | undefined;
   onDeleteColumn: (columnId: string) => void;
   onDeleteTask: (columnId: string, taskId: string) => void;
   onRenameColumn: (columnId: string, title: string) => void;
@@ -32,16 +34,61 @@ export function BoardColumn({
 }: BoardColumnProps) {
   const [taskTitle, setTaskTitle] = useState('');
   const [selectedTask, setSelectedTask] = useState<BoardTask | null>(null);
+  const {
+    attributes,
+    listeners,
+    setNodeRef: setDraggableRef,
+    transform,
+    isDragging,
+  } = useDraggable({
+    id: `column-drag:${column.id}`,
+    data: {
+      columnId: column.id,
+      type: 'column-drag',
+    },
+  });
+  const { setNodeRef: setDroppableRef, isOver } = useDroppable({
+    id: `column:${column.id}`,
+    data: {
+      columnId: column.id,
+      type: 'column',
+    },
+  });
+  const dragStyle = {
+    transform: CSS.Translate.toString(transform),
+  };
+
+  function setColumnNodeRef(node: HTMLElement | null) {
+    setDraggableRef(node);
+    setDroppableRef(node);
+  }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    onAddTask(column.id, taskTitle);
+    const task = onAddTask(column.id, taskTitle);
+
+    if (task) {
+      setSelectedTask(task);
+    }
+
     setTaskTitle('');
   }
 
   return (
-    <article className="column">
+    <article
+      className={[
+        'column',
+        isOver ? 'column-drop-active' : '',
+        isDragging ? 'column-dragging' : '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
+      ref={setColumnNodeRef}
+      style={dragStyle}
+    >
       <ColumnHeader
+        dragAttributes={attributes}
+        dragListeners={listeners}
         onDelete={() => onDeleteColumn(column.id)}
         onRename={(title) => onRenameColumn(column.id, title)}
         title={column.title}
@@ -50,6 +97,7 @@ export function BoardColumn({
       <div className="card-list">
         {column.tasks.map((task) => (
           <TaskCard
+            columnId={column.id}
             key={task.id}
             onDelete={() => onDeleteTask(column.id, task.id)}
             onOpen={() => setSelectedTask(task)}
