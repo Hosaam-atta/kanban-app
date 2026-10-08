@@ -8,7 +8,7 @@ export const otpVerificationSchema = z.object({
   token: z
     .string()
     .trim()
-    .regex(/^\d{6}$/, 'Enter the 6-digit verification code.'),
+    .regex(/^\d{8}$/, 'Enter the 8-digit verification code.'),
 });
 
 export type EmailLoginFormValues = z.infer<typeof emailLoginSchema>;

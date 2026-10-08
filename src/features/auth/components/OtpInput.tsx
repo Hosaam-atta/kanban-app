@@ -30,8 +30,8 @@ export function OtpInput({ error, isSubmitting, onSubmit }: OtpInputProps) {
         <input
           autoComplete="one-time-code"
           inputMode="numeric"
-          maxLength={6}
-          placeholder="123456"
+          maxLength={8}
+          placeholder="12345678"
           type="text"
           {...register('token')}
         />
